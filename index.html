@@ -5,7 +5,7 @@
     <title>LHotels.com</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="https://github.com/animal-penguin/LHotels.com/blob/874c616b18758eb1f8037e09faf054f9af9e0ca9/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="">
     <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/hannari.css">
@@ -21,12 +21,13 @@
     <script src="location-list/src/leaflet.locationlist.js"></script> -->
     <!-- pluginここまで -->
     <!-- tagFilterButton用plugin -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2.4.0/src/easy-button.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.5/src/leaflet-tag-filter-button.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2.4.0/src/easy-button.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.5/src/leaflet-tag-filter-button.min.js"></script>
+    <link rel="stylesheet" href="css/easy-button.css" />
+    <link rel="stylesheet" href="css/leaflet-tag-filter-button.css" />
+    <script src="js/easy-button.js"></script>
+    <script src="js/leaflet-tag-filter-button.js"></script>
     <!-- pluginここまで -->
-
+    <!-- SheetJS読込 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 
 </head>
 
@@ -50,135 +51,7 @@
     </div>
 
     <script>
-        var mymap = L.map('mapid').setView([34.653629744544524, 133.88682408164476], 15);
-        const filterCondition = [
-            "A)駐車場がガレージ",
-            "B)クロームキャスト",
-            "C)ウォーターサーバー",
-            "A&B",
-            "A&C",
-            "B&C",
-            "A&B&C",
-            "すべてに該当しない"
-        ]
-
-        const koikarasweets = [
-            34.64594616879294, 
-            133.86363890404894,
-            "恋からsweets 男塾ホテルグループ",
-            "【土曜日フリータイム】<br>4:00～24:00の間で<br>最大10時間ご利用",
-            "【↑料金】<br>スタンダード5,480円<br>プレミアム5,980円",
-            "【情報ソース】<br><a href= 'https://otokojuku-hotel.group/koikara-sweets/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610380' target='_blank'>ハッピーホテル</a><br><a href= 'https://happyhotel.jp/reserve/hotels/610380' target='_blank'>予約できます</a>",
-            "【備考】<br>駐車場：ガレージ",
-            "動画視聴：不可",
-            "ウォーターサーバーなし"
-        ]
-
-        const mahounopumpkin = [
-            34.646315448869885, 
-            133.86432829442035,
-            "岡山魔法のパンプキンスイート＆シークレット",
-            "【土曜日フリータイム】<br>4:00～19:00の間で<br>最大15時間ご利用",
-            "【↑料金】<br>5,490円",
-            "【情報ソース】<br><a href= 'https://www.chapel-hotel.co.jp/okayama/h045/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780017' target='_blank'>ハッピーホテル</a>",
-            "【備考】<br>駐車場：普通",
-            "動画視聴：不可",
-            "ウォーターサーバーなし"
-        ]
-
-        const finegarden2 = [
-            34.646354956683524, 
-            133.86493188947736,
-            "ファインガーデン岡山II",
-            "【土曜日フリータイム】<br>9:00～18:00の間で<br>最大7時間ご利用",
-            "【↑料金】<br>Eランク5,720円<br>Dランク5,940円<br>Cランク6,160円<br>Bランク6,380円<br>Aランク6,600円",
-            "【情報ソース】<br><a href= 'https://www.hotel-fine.co.jp/hotel/g-okayama2/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610436' target='_blank'>ハッピーホテル</a>",
-            "【備考】<br>駐車場：普通",
-            "動画視聴：不可",
-            "ウォーターサーバーなし"
-        ]
-
-        const restay = [
-            34.64663309979101, 
-            133.86577226714297,
-            "レステイ 岡山",
-            "【土曜日フリータイム】<br>6:00～翌3:00の間で<br>最大6時間ご利用<br>6:00～翌3:00の間で<br>最大9時間ご利用",
-            "【↑料金】<br>スタンダード6,130円<br>スタンダード7,230円",
-            "【情報ソース】<br><a href= 'https://www.restayhotels.com/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610124' target='_blank'>ハッピーホテル</a>",
-            "【備考】<br>駐車場：ガレージ",
-            "動画視聴：不可",
-            "ウォーターサーバーなし",
-            "<a href= 'https://www.restayhotels.com/detail/223#charge' target='_blank'>料金詳細</a>"
-        ]
-
-
-        const uru = [
-            34.52439457801499,
-            133.7881004574661,
-            "ホテル 潤 (ホテル ウルウ)",
-            "【土曜日フリータイム】<br>05:00～16:00の間で<br>最大11時間ご利用 <br>11: 00～ 20: 00の間で<br>最大9時間ご利用",
-            "【↑料金】<br>Dランク6,010 円<br>Dランク6,010 円",
-            "【情報ソース】<br><a href= 'https://hotel-uruu.com/' target='_blank'>公式HP</a><br><a href= 'https://couples.jp/hotel-details/21216' target='_blank'>カップルズ</a>",
-            "【備考】<br>駐車場：普通",
-            "動画視聴：不可",
-            "ウォーターサーバーなし"
-        ]
-
-
-        var marker = L.marker([34.64663309979101, 133.86577226714297]).addTo(mymap);
-        marker.bindPopup("<b>レステイ 岡山</b><br>【土曜日フリータイム】<br>6:00～翌3:00の間で<br>最大6時間ご利用<br>6:00～翌3:00の間で<br>最大9時間ご利用<br>【↑料金】<br>スタンダード6,130円<br>スタンダード7,230円<br>【情報ソース】<br><a href= 'https://www.restayhotels.com/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610124' target='_blank'>ハッピーホテル</a><br>駐車場:ガレージ<br>動画:不可<br>ウォーターサーバー:なし<br><a href= 'https://www.restayhotels.com/detail/223#charge' target='_blank'>料金詳細</a>").openPopup();
-        var marker = L.marker([34.5980702894063, 133.760161855135]).addTo(mymap);
-        marker.bindPopup("<b>HOTEL ANLI (ホテル アンリ)</b><br>【土曜日フリータイム】<br>05:00～18:00の間で<br>最大13時間ご利用<br>13:00～20:00の間で<br>最大7時間ご利用<br>【↑料金】<br>7000円<br>【情報ソース】<br><a href= 'https://www.hotenavi.com/anli/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610086' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.53300968848685, 133.80725268087502]).addTo(mymap);
-        marker.bindPopup("<b>ホテル 白雪姫</b><br>【土曜日フリータイム】<br>04:00～24:00の間で<br>最大8時間ご利用<br>04:00～24:00の間で<br>最大16時間ご利用<br>【↑料金】<br>4300円～5100円<br>5300円～6100円<br>【情報ソース】<br>公式HPなし<br><a href= 'https://happyhotel.jp/hotels/610108' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.525160872941356, 133.78788701095058]).addTo(mymap);
-        marker.bindPopup("<b>ホテル 潤 (ホテル ウルウ)</b><br>【土曜日フリータイム】<br>05:00～16:00の間で<br>最大11時間ご利用<br>11:00～20:00の間で<br>最大9時間ご利用<br>【↑料金】<br>Dランク6,010円<br>Dランク6,010 円<br>【情報ソース】<br><a href= 'https://hotel-uruu.com/' target='_blank'>公式HP</a><br><a href= 'https://couples.jp/hotel-details/21216' target='_blank'>カップルズ</a>").openPopup();
-        var marker = L.marker([34.61326927110548, 133.78108268862968]).addTo(mymap);
-        marker.bindPopup("<b>HOTEL VITA (ホテルビータ)</b><br>【土曜日フリータイム】<br>5時〜20時の間で<br>最大15時間ご利用<br>【↑料金】<br>スタンダード¥6,900<br>【情報ソース】<br><a href= 'https://hotel-vita.jp/index.html' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780351' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.626060527293426, 133.79549570808098]).addTo(mymap);
-        marker.bindPopup("<b>KNOB【BVCグループ】</b><br>【土曜日フリータイム】<br>5:00～20:00の間で<br>最大15時間ご利用<br>【↑料金】<br>ECONOMY ￥6,900<br>MODERATE￥7,800<br>DELUXE￥8,300<br>LUXURY￥9,000<br>SUITE￥9,800<br>【情報ソース】<br><a href= 'https://www.bvcgroup-knob.com/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780468' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.62521689024155, 133.78371905070787]).addTo(mymap);
-        marker.bindPopup("<b>HOTEL CRYSTAL</b><br>【土曜日フリータイム】<br>時間は自由で<br>最大4時間ご利用<br>【↑料金】<br>スタンダード5,600円<br>モデレート6,000円<br>スーペリア6,800円<br>デラックス7,200円<br>エグゼクティブ7,800円<br>【情報ソース】<br><a href= 'https://h-crystal.jp/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610692' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.57712350135579, 133.74781669701215]).addTo(mymap);
-        marker.bindPopup("<b>ホテル パレットゴールド</b><br>【土曜日フリータイム】<br>5時～20時の間で<br>最大15時間ご利用<br>【↑料金】<br>C5,600円<br>B5,900円<br>A6,800円<br>S7,000円<br>SS8,300円<br>【情報ソース】<br><a href= 'https://www.hotenavi.com/palette-g/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780055' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.59136154574375, 133.78278480726775]).addTo(mymap);
-        marker.bindPopup("<b>Hotel XX</b><br>【土曜日フリータイム】<br>6:00～23:00の間で<br>最大 17時間ご利用<br>【↑料金】<br>5,490円～6,990円<br>【情報ソース】<br><a href= 'http://www.hotel-xx.com/index.html' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780257' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.52253564717364, 133.76555616910787]).addTo(mymap);
-        marker.bindPopup("<b>Hotel Maxim</b><br>【土曜日フリータイム】<br>5:00～16:00の間で<br>最大 10時間ご利用<br>12:00～22:00の間で<br>最大 10時間ご利用<br>【↑料金】<br>￥5,500～￥7,500<br>【情報ソース】<br><a href= 'https://hotenavi.com/maxim/index.html' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610472' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.62822840045314, 133.89154414144116]).addTo(mymap);
-        marker.bindPopup("<b>HOTEL La bijou（ビジュー）</b><br>【土曜日フリータイム】<br>6:00～18:00の間で<br>最大12時間ご利用<br>13:00～20:00の間で<br>最大7時間ご利用<br>【↑料金】<br>￥5,990～￥8,300<br>￥5,990～￥8,300<br>【情報ソース】<br><a href= 'https://hayama-hotels.com/hotel/index.php?sid=47' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780013' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.59991854953331, 133.8141969149656]).addTo(mymap);
-        marker.bindPopup("<b>LUXURY HOTEL フェアリー</b><br>【土曜日フリータイム】<br>6:00～20:00の間で<br>最大14時間ご利用<br>【↑料金】<br>S type 6,400 円<br>ST type 7,100 円<br>SD type 7,600 円<br>DX type 8,200 円<br>L type 9,300 円(210&308)<br>【情報ソース】<br><a href= 'https://h-fairy.jp/hayashima/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780010' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.721047252757934, 133.90705560357927]).addTo(mymap);
-        marker.bindPopup("<b>ホテル 夢街道53</b><br>【土曜日フリータイム】<br>4:00～24:00の間で<br>最大7時間ご利用<br>【↑料金】<br>￥4,490～￥5,290<br>【情報ソース】<br><a href= 'https://happyhotel.jp/hotels/780467' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.64916036142449, 133.87661151398683]).addTo(mymap);
-        marker.bindPopup("<b>HOTEL KEY WEST</b><br>【土曜日フリータイム】<br>5:00～17:00の間で<br>最大 12時間ご利用<br>【↑料金】<br>￥5,720～￥8,360<br>【情報ソース】<br><a href= 'https://www.hotenavi.com/keywest/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610146' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.648223650179446, 133.92588334603275]).addTo(mymap);
-        marker.bindPopup("<b>クインズコート</b><br>【土曜日フリータイム】<br>4:00～24:00の間で<br>最大6時間ご利用<br>4:00～24:00の間で<br>最大 20時間ご利用<br>【↑料金】<br>￥4,300～￥5,300<br>￥4,800～￥5,800<br>【情報ソース】<br><a href= 'http://www.queens-c.com' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780164' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.678710945359775, 133.98188670604944]).addTo(mymap);
-        marker.bindPopup("<b>HOTEL FRANCE</b><br>【土曜日フリータイム】<br>6:00～12:00の間で<br>6時間ご利用<br>12:00～18:00の間で<br>4時間ご利用<br>【↑料金】<br>￥5,700～￥10,400<br>￥5,700～￥10,400<br>【情報ソース】<br><a href= 'https://happyhotel.jp/redirect/hotel-official-site?id=780393&to=http%3A%2F%2Fwww.vivafrance.jp%2F' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780393' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.646576941810174, 133.86508191726483]).addTo(mymap);
-        marker.bindPopup("<b>リンドス</b><br>【土曜日フリータイム】<br>4:00～16:00の間で<br>最大 12時間ご利用<br>11:00～21:00<br>最大 10時間ご利用<br>【↑料金】<br>¥5,100～¥6,100<br>【情報ソース】<br><a href= 'http://nagaoka.kt.fc2.com/syousai/rindosu.html' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780499' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.546292639597134, 133.68099409090027]).addTo(mymap);
-        marker.bindPopup("<b>ホテル パレットブロンズ</b><br>【土曜日フリータイム】<br>5:00～16:00の間で<br>最大 11時間ご利用<br>13:00～21:00の間で<br>最大 8時間ご利用<br>16:00～23:00の間で<br>最大 7時間ご利用<br>【↑料金】<br>￥5,500～￥6,600<br>￥5,500～￥6,600<br>￥5,500～￥6,600<br>【情報ソース】<br><a href= 'https://www.hotenavi.com/palette-b/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780464' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.62866316660832, 133.88706592109034]).addTo(mymap);
-        marker.bindPopup("<b>メサ【BVCグループ】</b><br>【土曜日フリータイム】<br>5:00～翌 1:00の間で<br>最大 6時間ご利用<br>5:00～翌 1:00の間で<br>最大 12時間ご利用<br>【↑料金】<br>￥7,500～￥9,800<br>￥8,500～￥10,800<br>【情報ソース】<br><a href= 'https://www.bvcgroup-mesa.com/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780311' target='_blank'>ハッピーホテル</a><br><a href= 'https://www.bvcgroup-mesa.com/reservation' target='_blank'>予約可</a>").openPopup();
-        var marker = L.marker([34.62683665744132, 133.91997429146863]).addTo(mymap);
-        marker.bindPopup("<b>ファインガーデン岡山</b><br>【土曜日フリータイム】<br>6:00～9:00の間で<br>最大8時間ご利用<br>9:00～13:00の間で<br>最大6時間ご利用<br>13:00～18:00の間で<br>最大5時間ご利用<br>【↑料金】<br>￥6,930～￥8,140<br>￥6,930～￥8,140<br>￥6,930～￥8,140<br>【情報ソース】<br><a href= 'https://www.hotel-fine.co.jp/hotel/g-okayama/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610484' target='_blank'>ハッピーホテル</a><br><a href='https://asp.hotel-story.ne.jp/ver3d/planlist.asp?hcod2=001&hidmode=select&mode=seek&minPrice=0&maxPrice=9999999&hidSELECTARRYMD=2023/02/23&hidSELECTHAKSU=1&hcod1=36830&chkpsn=0&hidSELECTadult=2&hidSELECTchilda=0&hidSELECTchild-b=undefined' target='_blank'>宿泊のみ予約可</a>").openPopup();
-        var marker = L.marker([34.627219546079004, 133.91990521550662]).addTo(mymap);
-        marker.bindPopup("<b>ホテル GLOW</b><br>【土曜日フリータイム】<br>4:00～18:00の間で<br>最大 14時間ご利用<br>12:00～20:00の間で<br>最大 8時間ご利用<br>【↑料金】<br>￥6,300～￥8,900<br>￥6,800～￥9,400<br>【情報ソース】<br><a href= 'https://hotelglow.in/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780457' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.58352991676971, 133.88454596563787]).addTo(mymap);
-        marker.bindPopup("<b>ホテル クジーラ</b><br>【土曜日フリータイム】<br>4:00～16:00の間で<br>最大 12時間ご利用<br>10:00～20:00の間で<br>最大 10時間ご利用<br>【↑料金】<br>￥5,300～￥6,300<br>￥5,300～￥6,300<br>【情報ソース】<br>公式HPなし<br><a href= 'https://happyhotel.jp/hotels/780382' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.63107162228862, 133.90012453595304]).addTo(mymap);
-        marker.bindPopup("<b>HOTEL alulu 岡山南</b><br>【土曜日フリータイム】<br>4:00～15:00の間で<br>最大6時間ご利用<br>15:00～18:00の間で<br>最大5時間ご利用<br>18:00～21:00の間で<br>最大4時間ご利用<br>【↑料金】<br>5600円<br>【情報ソース】<br><a href= 'http://ohiruneracco.jp/okayamaminami/index.html' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610107' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.61728159948378, 133.85683911022332]).addTo(mymap);
-        marker.bindPopup("<b>丘のホテル フォーナインヒル</b><br>【土曜日フリータイム】<br>5：00～19：00 の間で<br>最大 14時間ご利用<br>【↑料金】<br>7,800円～9,800円<br>【情報ソース】<br><a href= 'https://fournine-hill.com/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/34100170' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.630573860793156, 133.89739862645783]).addTo(mymap);
-        marker.bindPopup("<b>おひるねラッコ</b><br>【土曜日フリータイム】<br>4:00～17:00の間で<br>最大 13時間ご利用<br>15:00～21:00の間で<br>最大 6時間ご利用<br>【↑料金】<br>￥6,300～￥7,300<br>【情報ソース】<br><a href= 'http://ohiruneracco.jp/okayamaresort/index.html' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610119' target='_blank'>ハッピーホテル</a>").openPopup();
-        var marker = L.marker([34.62830759819072, 133.9191435620187]).addTo(mymap);
-        marker.bindPopup("<b>ホテル O</b><br>【土曜日フリータイム】<br>5:00～18:00の間で<br>最大 13時間ご利用<br>【↑料金】<br>￥7,600～￥10,500<br>【情報ソース】<br><a href= 'https://hotel-o.jp/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/620976' target='_blank'>ハッピーホテル</a><br><a href= 'https://biclick-seek.info/shop/1024_o/roominfo.html' target='_blank'>予約可</a>").openPopup();
-        var marker = L.marker([34.654820556380116, 133.93048338972864]).addTo(mymap);
-        marker.bindPopup("<b>ホテル MOZ</b><br>【土曜日フリータイム】<br>5:00～24:00の間で<br>最大 12時間ご利用<br>【↑料金】<br>￥7,800～￥16,800<br>【情報ソース】<br><a href= 'https://www.bvcgroup-moz.com/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780513' target='_blank'>ハッピーホテル</a><br><a href= 'https://www.bvcgroup-moz.com/reservation' target='_blank'>予約可</a>").openPopup();
+        let mymap = L.map('mapid').setView([34.653629744544524, 133.88682408164476], 15);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
@@ -205,82 +78,442 @@
             navigator.geolocation.getCurrentPosition(success, error);
         }
 
-        /* 検索ボックス
-        var options = {
-            geojsonServiceAddress: "./testgeojsondata.json",
-            placeholderMessage: "検索条件を入力してください。",
-            notFoundMessage: "に一致する検索対象がありません。",
-            notFoundHint: "検索条件を変えて再検索してください。",
-            pointGeometryZoomLevel: 10
-        };
 
-        $("#searchContainer").GeoJsonAutocomplete(options);
-        */
-       
 
-        /* 登録リスト
-        // Locationlist
-        var locList = [{
-                title: '恋からsweets 男塾ホテルグループ',
-                latlng: [34.646700224872724, 133.863327086448],
-                zoom: 15
-            },
-            {
-                title: 'point_2',
-                latlng: [35.7101, 139.8127],
-                zoom: 15
-            },
-            {
-                title: 'point_3',
-                latlng: [35.7101, 139.8167],
-                zoom: 15
-            }
-        ];
 
-        var locListCtrl = new L.control.locationlist({
-            locationsList: locList,
-            showList: true
-        });
 
-        mymap.addControl(locListCtrl);
 
-        locListCtrl.on('prev', function() {
-            alert('prev call back function.');
-        });
-        locListCtrl.on('next', function() {
-            alert('next call back function.');
-        });
+        let koikarasweets = [
+            34.64594616879294,
+            133.86363890404894,
+            "恋からsweets 男塾ホテルグループ",
+            "【土曜日フリータイム】<br>4:00～24:00の間で<br>最大10時間ご利用",
+            "【↑料金】<br>スタンダード5,480円<br>プレミアム5,980円",
+            "【情報ソース】<br><a href= 'https://otokojuku-hotel.group/koikara-sweets/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610380' target='_blank'>ハッピーホテル</a><br><a href= 'https://happyhotel.jp/reserve/hotels/610380' target='_blank'>予約できます</a>",
+            "駐車場：ガレージ",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
 
-        // add marker
-        for (let locObj of locList) {
-            L.marker(locObj.latlng).addTo(mymap);
+
+
+        let mahounopumpkin = [
+            34.646315448869885,
+            133.86432829442035,
+            "岡山魔法のパンプキンスイート＆シークレット",
+            "【土曜日フリータイム】<br>4:00～19:00の間で<br>最大15時間ご利用",
+            "【↑料金】<br>5,490円",
+            "【情報ソース】<br><a href= 'https://www.chapel-hotel.co.jp/okayama/h045/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/780017' target='_blank'>ハッピーホテル</a>",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let finegarden2 = [
+            34.646354956683524,
+            133.86493188947736,
+            "ファインガーデン岡山II",
+            "【土曜日フリータイム】<br>9:00～18:00の間で<br>最大7時間ご利用",
+            "【↑料金】<br>Eランク5,720円<br>Dランク5,940円<br>Cランク6,160円<br>Bランク6,380円<br>Aランク6,600円",
+            "【情報ソース】<br><a href= 'https://www.hotel-fine.co.jp/hotel/g-okayama2/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610436' target='_blank'>ハッピーホテル</a>",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let restay = [
+            34.64663309979101,
+            133.86577226714297,
+            "レステイ 岡山",
+            "【土曜日フリータイム】<br>6:00～翌3:00の間で<br>最大6時間ご利用<br>6:00～翌3:00の間で<br>最大9時間ご利用",
+            "【↑料金】<br>スタンダード6,130円<br>スタンダード7,230円",
+            "【情報ソース】<br><a href= 'https://www.restayhotels.com/' target='_blank'>公式HP</a><br><a href= 'https://happyhotel.jp/hotels/610124' target='_blank'>ハッピーホテル</a>",
+            "駐車場：ガレージ",
+            "動画視聴：不可",
+            "ウォーターサーバーなし",
+            "<a href= 'https://www.restayhotels.com/detail/223#charge' target='_blank'>料金詳細</a>"
+        ]
+
+
+        let uru = [
+            34.52439457801499,
+            133.7881004574661,
+            "ホテル 潤 (ホテル ウルウ)",
+            "【土曜日フリータイム】<br>05:00～16:00の間で<br>最大11時間ご利用 <br>11: 00～ 20: 00の間で<br>最大9時間ご利用",
+            "【↑料金】<br>Dランク6,010 円<br>Dランク6,010 円",
+            "【情報ソース】<br><a href= 'https://hotel-uruu.com/' target='_blank'>公式HP</a><br><a href= 'https://couples.jp/hotel-details/21216' target='_blank'>カップルズ</a>",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let shirayuki = [
+            34.53262985345525,
+            133.8065229633848,
+            "ホテル 白雪姫",
+            "【土曜日フリータイム】<br>04:00～24:00の間で<br>最大8時間ご利用<br>04:00～24:00の間で<br>最大16時間ご利用 ",
+            "【↑料金】<br>4300円～5100円<br>5300円～6100円",
+            "【情報ソース】<br>×",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let vita = [
+            34.61265978487449,
+            133.7811865653627,
+            "HOTEL VITA (ホテルビータ)",
+            "【土曜日フリータイム】 <br>5時〜20時の間で<br>最大15時間ご利用",
+            "【↑料金】<br>スタンダード¥6,900",
+            "【情報ソース】<br><a href='https://hotel-vita.jp/index.html'>https://hotel-vita.jp/index.html</a>",
+            "駐車場：ガレージ",
+            "動画視聴：可",
+            "ウォーターサーバーあり",
+            "料金詳細➡<br><a href='https://hotel-vita.jp/room.html'>https://hotel-vita.jp/room.html"
+        ]
+
+        let KNOB = [
+            34.6258026753909,
+            133.79475219026807,
+            "KNOB【BVCグループ】",
+            "【土曜日フリータイム】 <br>5:00～20:00の間で<br>最大 15時間ご利用",
+            "【↑料金】<br>ECONOMY ￥6,900<br>MODERATE￥7,800<br>DELUXE￥8,300<br>LUXURY￥9,000<br>SUITE￥9,800",
+            "【情報ソース】<br><a href='https://www.bvcgroup-knob.com/'>https://www.bvcgroup-knob.com/</a>",
+            "駐車場：ガレージ",
+            "動画視聴：可",
+            "ウォーターサーバーなし",
+            "予約可否:可",
+            "予約用リンク:https://www.bvcgroup-knob.com/reservation",
+        ]
+
+        let CRYSTAL = [
+            34.624669461371504,
+            133.7826686203701,
+            "HOTEL CRYSTAL",
+            "【土曜日フリータイム】 <br>時間は自由で<br>最大4時間ご利用",
+            "【↑料金】<br>スタンダード5,600円<br>モデレート6,000円<br>スーペリア6,800円<br>デラックス7,200円<br>エグゼクティブ7,800円",
+            "【情報ソース】<br><a href='https://h-crystal.jp/'>https://h-crystal.jp/</a>",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし<br>(ウェルカムドリンクが一杯無料のドリンクバー)"
+        ]
+
+        let Palette = [
+            34.577198388887346, 133.74776909342467,
+            "HOTEL Palette Gold",
+            "【土曜日フリータイム】 <br>5時～20時の間で<br>最大 15時間ご利用",
+            "【↑料金】<br>C5,600円<br>B5,900円<br>A6,800円<br>S7,000円<br>SS8,300円",
+            "【情報ソース】<br><a href='https://www.hotenavi.com/palette-g/'>https://www.hotenavi.com/palette-g/</a>",
+            "予約可否:不可",
+            "駐車場：普通", "動画視聴：不可", "ウォーターサーバーあり"
+        ]
+
+        let doublex = [
+            34.59056752299299,
+            133.7817153329819,
+            "ホテル ダブルエックス",
+            "【土曜日フリータイム】 <br>6:00～23:00の間で<br>最大 17時間ご利用",
+            "【↑料金】<br>5,490円～6,990円",
+            "【情報ソース】<br><a href='http://www.hotel-xx.com/index.html'>http://www.hotel-xx.com/index.html",
+            "駐車場：ガレージ",
+            "動画視聴：不可",
+            "ウォーターサーバーなし<br>料金詳細➡<br><a href='http://www.hotel-xx.com/charge.html'>http://www.hotel-xx.com/charge.html"
+        ]
+
+        let maxim = [
+            34.52251785905239,
+            133.76524563136599,
+            "ホテル マキシム",
+            "【土曜日フリータイム】 <br>5:00～16:00の間で<br>最大 10時間ご利用<br>12:00～22:00の間で<br>最大 10時間ご利用",
+            "【↑料金】<br>￥5,500～￥7,500",
+            "【情報ソース】<br><a href='https://hotenavi.com/maxim/index.html'>https://hotenavi.com/maxim/index.html",
+            "駐車場：ガレージ",
+            "動画視聴：不可",
+            "ウォーターサーバーなし<br>料金詳細➡<br><a href='https://hotenavi.com/maxim/index.html'>https://hotenavi.com/maxim/index.html"
+        ]
+
+        let bijou = [
+            34.627478685179724,
+            133.88987349135692,
+            "HOTEL La bijou（ビジュー）",
+            "【土曜日フリータイム】 <br>6:00～18:00の間で<br>最大 12時間ご利用<br>13:00～20:00の間で<br>最大 7時間ご利用",
+            "【↑料金】<br>￥5,990～￥8,300<br>￥5,990～￥8,300",
+            "【情報ソース】<br><a href='https://hayama-hotels.com/hotel/index.php?sid=47'>https://hayama-hotels.com/hotel/index.php?sid=47",
+            "駐車場：ガレージ",
+            "動画視聴：不可",
+            "ウォーターサーバーなし<br>料金詳細➡<br><a href='https://hayama-hotels.com/hotel/price.php?sid=47'>https://hayama-hotels.com/hotel/price.php?sid=47",
+        ]
+
+        let fairy = [
+            34.599750705865915,
+            133.8131025743762,
+            "LUXURY HOTEL フェアリー",
+            "【土曜日フリータイム】 <br>6:00～20:00の間で<br>最大 14時間ご利用",
+            "【↑料金】<br>S type 6,400 円<br>ST type 7,100 円<br>SD type 7,600 円<br>DX type 8,200 円<br>L type 9,300 円<br>(210,308)",
+            "【情報ソース】<br><a href='https://h-fairy.jp/hayashima/'>https://h-fairy.jp/hayashima/</a>",
+            "駐車場：普通",
+            "動画視聴：可<br>(208､310を除く)",
+            "ウォーターサーバーあり"
+        ]
+
+        let yumekaido = [
+            34.72105687009771,
+            133.90710924836367,
+            "ホテル 夢街道53",
+            "【土曜日フリータイム】 <br>4:00～24:00の間で<br>最大 7時間ご利用",
+            "【↑料金】<br>￥4,490～￥5,290",
+            "【情報ソース】<br><a href='https://happyhotel.jp/hotels/780467'>https://happyhotel.jp/hotels/780467",
+            "駐車場：ガレージ",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let WEST = [
+            34.64918667218875,
+            133.8766014775229,
+            "HOTEL KEY WEST",
+            "【土曜日フリータイム】 <br>5:00～17:00の間で<br>最大 12時間ご利用",
+            "【↑料金】<br>￥5,720～￥8,360",
+            "【情報ソース】<br><a href='https://www.hotenavi.com/keywest/'>https://www.hotenavi.com/keywest/</a>",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし<br>料金詳細➡<br><a href='https://www.hotenavi.com/keywest/room#rank1'>https://www.hotenavi.com/keywest/room#rank1"
+        ]
+
+        let quins = [
+            34.648285432030306,
+            133.9259584502787,
+            "クインズコート",
+            "【土曜日フリータイム】 <br>4:00～24:00の間で<br>最大 6時間ご利用<br>4:00～24:00の間で<br>最大 20時間ご利用",
+            "【↑料金】<br>￥4,300～￥5,300<br>￥4,800～￥5,800",
+            "【情報ソース】<br><a href='http://www.queens-c.com'>http://www.queens-c.com",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let FRANCE = [
+            34.67886977355339,
+            133.98123224835552,
+            "HOTEL FRANCE",
+            "【土曜日フリータイム】 <br>6:00～12:00の間で<br>6時間ご利用<br>12:00～18:00の間で<br>4時間ご利用",
+            "【↑料金】<br>￥5,700～￥10,400<br>￥5,700～￥10,400",
+            "【情報ソース】<br><a href='https://www.vivafrance.jp/'>https://www.vivafrance.jp/</a>",
+            "駐車場：ガレージ",
+            "動画視聴：可",
+            "ウォーターサーバーあり"
+        ]
+
+        let lindos = [
+            34.64659459454076,
+            133.86508191779595,
+            "リンドス",
+            "【土曜日フリータイム】 <br>4:00～16:00の間で<br>最大 12時間ご利用<br>11:00～21:00<br>最大 10時間ご利用",
+            "【↑料金】<br>￥5,100～\\6,100",
+            "【情報ソース】<br><a href='http://nagaoka.kt.fc2.com/syousai/rindosu.html'>http://nagaoka.kt.fc2.com/syousai/rindosu.html",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let paletblond = [
+            34.54638984935796,
+            133.68087607613458,
+            "ホテル パレットブロンズ",
+            "【土曜日フリータイム】 <br>5:00～16:00の間で<br>最大 11時間ご利用<br>13:00～21:00の間で<br>最大 8時間ご利用<br>16:00～23:00の間で<br>最大 7時間ご利用",
+            "【↑料金】<br>￥5,500～￥6,600<br>￥5,500～￥6,600<br>￥5,500～￥6,600",
+            "【情報ソース】<br><a href='https://www.hotenavi.com/palette-b/'>https://www.hotenavi.com/palette-b/</a>",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let mesa = [
+            34.62856605502352,
+            133.8870873758665,
+            "メサ【BVCグループ】",
+            "【土曜日フリータイム】 <br>5:00～翌 1:00の間で<br>最大 6時間ご利用<br>　5:00～翌 1:00の間で<br>最大 12時間ご利用",
+            "【↑料金】<br>￥7,500～￥9,800<br>  ￥8,500～￥10,800",
+            "【情報ソース】<br><a href='https://www.bvcgroup-mesa.com/'>https://www.bvcgroup-mesa.com/</a>",
+            "駐車場：ガレージ",
+            "動画視聴：可",
+            "ウォーターサーバーあり",
+            "予約可否:可",
+            "予約用リンク:https://www.bvcgroup-mesa.com/reservation"
+        ]
+
+        let finegarden = [
+            34.626883600905686,
+            133.92006974834223,
+            "ファインガーデン岡山",
+            "【土曜日フリータイム】 <br>6:00～9:00の間で<br>最大8時間ご利用<br>9:00～13:00の間で<br>最大6時間ご利用<br>13:00～18:00の間で<br>最大5時間ご利用",
+            "【↑料金】<br>￥6,930～￥8,140<br>￥6,930～￥8,140<br>￥6,930～￥8,140",
+            "【情報ソース】<br><a href='https://www.hotel-fine.co.jp/hotel/g-okayama/'>https://www.hotel-fine.co.jp/hotel/g-okayama/</a>",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし",
+            "予約可否:可",
+            "予約用リンク:https://asp.hotel-story.ne.jp/ver3d/planlist.asp?hcod2=001&hidmode=select&mode=seek&minPrice=0&maxPrice=9999999&hidSELECTARRYMD=2023/02/23&hidSELECTHAKSU=1&hcod1=36830&chkpsn=0&hidSELECTadult=2&hidSELECTchilda=0&hidSELECTchild-b=undefined"
+        ]
+
+        let GLOW = [
+            34.627380614606196,
+            133.9198301186108,
+            "ホテル GLOW",
+            "【土曜日フリータイム】 <br>4:00～18:00の間で<br>最大 14時間ご利用<br>12:00～20:00の間で<br>最大 8時間ご利用",
+            "【↑料金】<br>　￥6,300～￥8,900<br>　￥6,800～￥9,400",
+            "【情報ソース】<br><a href='https://hotelglow.in/'>https://hotelglow.in/</a>",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let kujira = [
+            34.58375957243974,
+            133.88472836368518,
+            "ホテル クジーラ",
+            "【土曜日フリータイム】 <br>4:00～16:00の間で<br>最大 12時間ご利用<br>10:00～20:00の間で<br>最大 10時間ご利用",
+            "【↑料金】<br>　￥5,300～￥6,300<br>　￥5,300～￥6,300",
+            "【情報ソース】<br>×",
+            "駐車場：ガレージ",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let alulu = [
+            34.631142249864446,
+            133.89996360477116,
+            "HOTEL alulu 岡山南",
+            "【土曜日フリータイム】 <br>4:00～15:00の間で<br>最大6時間ご利用<br>15:00～18:00の間で<br>最大5時間ご利用<br>18:00～21:00の間で<br>最大4時間ご利用",
+            "【↑料金】<br>¥5,600",
+            "【情報ソース】<br><a href='http://ohiruneracco.jp/okayamaminami/index.html'>http://ohiruneracco.jp/okayamaminami/index.html",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let fornine = [
+            34.61717564755674,
+            133.85674254668854,
+            "丘のホテル フォーナインヒル",
+            "【土曜日フリータイム】 <br>5：00～19：00 の間で<br>最大14時間ご利用",
+            "【↑料金】<br>7,800円～9,800円",
+            "【情報ソース】<br><a href='https://fournine-hill.com/'>https://fournine-hill.com/</a>",
+            "駐車場：ガレージ",
+            "動画視聴：可<br>(ラルジュ、スイーツの部屋)",
+            "ウォーターサーバーなし<br>料金詳細➡<br><a href='https://fournine-hill.com/fee/'>https://fournine-hill.com/fee/</a>"
+        ]
+
+        let rako = [
+            34.63066214892876,
+            133.89705530436603,
+            "おひるねラッコ",
+            "【土曜日フリータイム】 <br>4:00～17:00の間で<br>最大 13時間ご利用<br>15:00～21:00の間で<br>最大 6時間ご利用",
+            "【↑料金】<br>￥6,300～￥7,300",
+            "【情報ソース】<br><a href='http://ohiruneracco.jp/okayamaresort/index.html'>http://ohiruneracco.jp/okayamaresort/index.html",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let hotelo = [
+            34.628387054762484,
+            133.9190577332718,
+            "ホテル O",
+            "【土曜日フリータイム】 <br>5:00～18:00の間で<br>最大 13時間ご利用",
+            "【↑料金】<br>￥7,600～￥10,500",
+            "【情報ソース】<br><a href='https://hotel-o.jp/'>https://hotel-o.jp/</a>",
+            "駐車場：普通",
+            "動画視聴：可",
+            "ウォーターサーバーなし",
+            "予約可否:可",
+            "予約用リンク<br><a href='https://biclick-seek.info/shop/1024_o/roominfo.html'>https://biclick-seek.info/shop/1024_o/roominfo.html"
+        ]
+
+        let moz = [
+            34.654794078346306,
+            133.93055849120407,
+            "ホテル MOZ",
+            "【土曜日フリータイム】 <br>5:00～24:00の間で<br>最大 12時間ご利用",
+            "【↑料金】<br>￥7,800～￥16,800",
+            "【情報ソース】<br><a href='https://www.bvcgroup-moz.com/'>https://www.bvcgroup-moz.com/</a>",
+            "駐車場：普通",
+            "動画視聴：可",
+            "ウォーターサーバーなし<br>料金詳細➡<br><a href=''>https://www.bvcgroup-moz.com/price",
+            "予約可否:可",
+            "予約用リンク<br><a href='https://www.bvcgroup-moz.com/reservation'>https://www.bvcgroup-moz.com/reservation"
+        ]
+
+        let ANLI = [
+            34.597460928468,
+            133.76004967170385,
+            "HOTEL ANLI (ホテル アンリ)",
+            "【土曜日フリータイム】 <br>1部：5時～18時<br>最大 13時間ご利用<br>2部：13時～20時<br>最大 7時間ご利用",
+            "【↑料金】<br>￥7,000均一（税込）",
+            "【情報ソース】<br><a href='https://www.hotenavi.com/anli/'>https://www.hotenavi.com/anli/</a>",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーなし"
+        ]
+
+        let okid = [
+            34.59890051744418,
+            133.76260311059812,
+            "ホテルオーキッド",
+            "【土曜日フリータイム】 <br>6:00～24:00の間<br>最大 1時間30分ご利用<br>￥3,180～￥5,380<br>6:00～24:00の間<br>最大3時間ご利用<br>￥4,300～￥6,500<br>6:00～24:00の間<br>最大 5時間ご利用<br>￥5,400～￥7,600",
+            "【↑料金】<br>￥7,000均一（税込）",
+            "【情報ソース】<br><a href='https://happyhotel.jp/hotels/780110'>https://happyhotel.jp/hotels/780110</a>",
+            "駐車場：普通",
+            "動画視聴：不可",
+            "ウォーターサーバーあり"
+        ]
+
+
+        let locations = [koikarasweets, mahounopumpkin, finegarden2, restay, uru, shirayuki, vita, KNOB, CRYSTAL, Palette, doublex, maxim, bijou, fairy, yumekaido, WEST, quins, FRANCE, lindos, paletblond, mesa, finegarden, GLOW, kujira, alulu, fornine, rako, hotelo, moz, ANLI, okid];
+
+        for (let i = 0; i < locations.length; i++) {
+
+
+
+            let location = locations[i];
+
+            let latitude = location[0];
+            let longitude = location[1];
+            let name = location[2];
+            let businessHours = location[3];
+            let price = location[4];
+            let source = location[5];
+            let parkingType = location[6];
+            let videoWatching = location[7];
+            let waterServer = location[8];
+
+            L.marker([latitude, longitude], {
+                    tags: [parkingType, videoWatching]
+                })
+                .addTo(mymap)
+                .bindPopup(name.bold() + '<br>' +
+                    businessHours + '<br>' +
+                    price + '<br>' +
+                    source + '<br>' +
+                    parkingType + '<br>' +
+                    videoWatching + '<br>' +
+                    waterServer);
+
         }
-        登録リストここまで*/
 
 
 
-        var fistMarker = L.marker([koikarasweets[0], koikarasweets[1]], {
-            tags: [filterCondition[0]]
-        }).addTo(mymap).bindPopup(koikarasweets[2].bold() + '<br>' + koikarasweets[3] + '<br>' + koikarasweets[4] + '<br>' + koikarasweets[5] + '<br>' + koikarasweets[6] + '<br>' + koikarasweets[7] + '<br>' + koikarasweets[8]);
 
-        var secondMarker = L.marker([mahounopumpkin[0], mahounopumpkin[1]], {
-            tags: [filterCondition[1]]
-        }).addTo(mymap).bindPopup(mahounopumpkin[2].bold() + '<br>' + mahounopumpkin[3] + '<br>' + mahounopumpkin[4] + '<br>' + mahounopumpkin[5] + '<br>' + mahounopumpkin[6] + '<br>' + mahounopumpkin[7] + '<br>' + mahounopumpkin[8]);
 
-        var thirdMarker = L.marker([finegarden2[0], finegarden2[1]], {
-            tags: [filterCondition[7]]
-        }).addTo(mymap).bindPopup(finegarden2[2].bold() + '<br>' + finegarden2[3] + '<br>' + finegarden2[4] + '<br>' + finegarden2[5] + '<br>' + finegarden2[6] + '<br>' + finegarden2[7] + '<br>' + finegarden2[8]);
-
-        var forthMarker = L.marker([restay[0], restay[1]], {
-            tags: [filterCondition[0]]
-        }).addTo(mymap).bindPopup(restay[2].bold() + '<br>' + restay[3] + '<br>' + restay[4] + '<br>' + restay[5] + '<br>' + restay[6] + '<br>' + restay[7] + '<br>' + restay[8] + '<br>' + restay[9]);
 
         L.control.tagFilterButton({
-            data: [filterCondition[0], filterCondition[1], filterCondition[2], filterCondition[3], filterCondition[4], filterCondition[5], filterCondition[6], filterCondition[7]],
-            icon: '"▼"'
+            data: ['駐車場：ガレージ', '動画視聴：可', 'ウォーターサーバーあり'],
+            icon: '<p style="margin-top:0px; margin-left:0px;">▼</p>'
         }).addTo(mymap);
 
     </script>
+
+
 
 </body>
 
