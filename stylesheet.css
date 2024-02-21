@@ -1,7 +1,7 @@
     .wrap-container {
         width: 100%;
         height: 100%;
-        background-image: url(https://resize2-icotto.k-img.com/cF_aSUSeK_Pv9Mtw14UN-ntbw6iViONUTfNxgWd8yDE/rs:fill:700:467/plain/https://icotto.k-img.com/system/press_images/000/611/490/a6bf21f5dc63c12d47029ae643b77f744e3409b6.jpg);
+        background-image: url(https://gallery.intage.co.jp/wp-content/uploads/2021/09/620ed7f568a2895d5ee84000a992c9ff_f2714-1.jpg);
         background-size: cover;
     }
 
@@ -23,8 +23,8 @@
     }
 
     #mapid {
-        height: 500px;
-        width: 750px;
+        height: 600px;
+        width: 900px;
     }
 
     #mapid a {
