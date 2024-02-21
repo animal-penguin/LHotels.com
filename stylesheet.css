@@ -54,7 +54,7 @@
     @media all and (max-width: 480px) {
 
         #mapid {
-            height: 350px;
+            height: 400px;
             width: 95%;
         }
     }
